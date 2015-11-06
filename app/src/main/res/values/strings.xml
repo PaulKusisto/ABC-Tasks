@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ABC Tasks</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete_checked_tasks">Delete Checked Tasks</string>
+    <string name="title_activity_create_task">Create a New Task</string>
+    <string name="create_task_header_prompt">Task Header:</string>
+    <string name="create_task_header_spinner_create_task">Create a new task header</string>
+    <string name="create_task_header_text_hint">Header Name</string>
+    <string name="create_task_task_prompt">Task Name:</string>
+    <string name="create_task_task_text_hint">What needs to get done?</string>
+    <string name="title_activity_edit_task">Edit Task</string>
+</resources>
