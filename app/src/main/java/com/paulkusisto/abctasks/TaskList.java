@@ -58,17 +58,6 @@ public class TaskList implements Iterable<Task>{
     }
 
     /**
-     * Creates a new task, and writes it to the database.
-     *
-     * @param header The header under which to file this task.
-     * @param taskName The core text for this task, which should say what needs to be done to complete the task.
-     */
-    private void createNewTask(String header, String taskName){
-        Task newTask = new Task(header, taskName);
-        this.dbHelper.createTask(newTask);
-    }
-
-    /**
      * Removes from the database all tasks which have a checked value of True
      */
     public void clearCheckedTasks(){
@@ -79,7 +68,7 @@ public class TaskList implements Iterable<Task>{
         }
     }
 
-    private void createTestTasks(){
+    /*private void createTestTasks(){
         this.createNewTask("'C' Priority", "write blog post");
         this.createNewTask("'C' Priority", "apply for internships");
         this.createNewTask("'C' Priority", "make video");
@@ -91,7 +80,7 @@ public class TaskList implements Iterable<Task>{
         this.createNewTask("'A' Priority", "finish app!");
         this.createNewTask("'A' Priority", "write business paper");
         this.createNewTask("'A' Priority", "publish app");
-    }
+    }*/
 
     @Override
     public Iterator<Task> iterator() {

@@ -1,5 +1,7 @@
 package com.paulkusisto.abctasks;
 
+import android.content.Context;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -30,8 +32,8 @@ public class Task{
         this.taskName = taskName;
         this.checked = false;
 
-        // By default, set the priority to low.
-        this.setPriority("Low");  //TODO: replace the string in this line with a string resource
+        // By default, set the priority to the empty string
+        this.setPriority("");
 
         // By default, set the due date to the Unix Epoch
         Calendar epoch = Calendar.getInstance();

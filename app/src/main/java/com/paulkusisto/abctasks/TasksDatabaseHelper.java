@@ -63,6 +63,11 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper{
         return values;
     }
 
+    /**
+     * Creates a new task, and writes it to the database.
+     *
+     * @param task A task object to be added to the database.  The task's ID field is ignored by this function.
+     */
     public void createTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
 

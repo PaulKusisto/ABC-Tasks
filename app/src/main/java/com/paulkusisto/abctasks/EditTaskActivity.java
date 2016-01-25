@@ -1,6 +1,7 @@
 package com.paulkusisto.abctasks;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -75,6 +76,10 @@ public class EditTaskActivity extends AppCompatActivity {
                 // get the task name
                 String taskName = taskText.getText().toString();
 
+                // get the task priority
+                // TODO
+                String taskPriority = getResources().getString(R.string.priority_low);  // Default to low priority
+
                 // get the calendar info for due date
                 Integer dueDateYear = taskDueDatePicker.getYear();
                 Integer dueDateMonth = taskDueDatePicker.getMonth();
@@ -86,6 +91,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 intent.putExtra("dueDateYear", dueDateYear);
                 intent.putExtra("dueDateMonth", dueDateMonth);
                 intent.putExtra("dueDateDayOfMonth", dueDateDayOfMonth);
+                intent.putExtra("taskPriority", taskPriority);
                 intent.putExtra("id", taskId);
                 setResult(RESULT_OK, intent);
                 finish();
