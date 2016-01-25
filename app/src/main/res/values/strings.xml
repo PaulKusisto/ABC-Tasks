@@ -8,5 +8,9 @@
     <string name="create_task_header_text_hint">Header Name</string>
     <string name="create_task_task_prompt">Task Name:</string>
     <string name="create_task_task_text_hint">What needs to get done?</string>
+    <string name="create_task_due_date_prompt">Select a due date:</string>
     <string name="title_activity_edit_task">Edit Task</string>
+    <string name="priority_low">Low</string>
+    <string name="priority_medium">Medium</string>
+    <string name="priority_high">High</string>
 </resources>

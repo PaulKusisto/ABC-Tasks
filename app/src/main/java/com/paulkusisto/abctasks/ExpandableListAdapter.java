@@ -5,6 +5,7 @@ package com.paulkusisto.abctasks;
  * Based on code from http://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
  */
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +68,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
         CheckBox childCheckbox = (CheckBox) convertView.findViewById(R.id.cbListItem);
 
+        TextView txtDueDate = (TextView) convertView.findViewById(R.id.lblDueDate);
+
+        // Use the device's regional date format to display the due date
+        DateFormat regionalDateFormat = DateFormat.getDateInstance();
+        regionalDateFormat.setCalendar(childTask.getDueDate());
+        txtDueDate.setText(regionalDateFormat.format(childTask.getDueDate().getTime()));
+
+        // Set the color of the priority indicator
+        // TODO: that^
+
+        // Set the Task's name
         txtListChild.setText(childTask.getTaskName());
+
+        // Set up the checkbox to store state changes
         childCheckbox.setChecked(childTask.getChecked());
         childCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -76,17 +90,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 TasksDatabaseHelper dbHelper = new TasksDatabaseHelper(_context);
 
                 childTask.setChecked(isChecked);
-                dbHelper.updateTask(childTask);
+                dbHelper.updateTask(childTask.getId(), childTask);
             }
         });
+
+        // Tapping on the task opens the editing window
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: specific method to build an intent from a task - this passing structure breaks due dates
                 Intent intent = new Intent(_context, EditTaskActivity.class);
                 intent.putStringArrayListExtra("listDataHeader", (ArrayList<String>) _listDataHeader);
                 intent.putExtra("header", childTask.getHeaderName());
                 intent.putExtra("task",childTask.getTaskName());
                 intent.putExtra("id",childTask.getId());
+                // TODO: add additional intents for due date, priority, etc.
                 ((Activity) _context).startActivityForResult(intent, 2);
             }
         });

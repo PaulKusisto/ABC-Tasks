@@ -15,16 +15,31 @@ public class TaskList implements Iterable<Task>{
 
     private TasksDatabaseHelper dbHelper;
 
+    /**
+     * Inits the tasklist by opening a connection to the database.
+     *
+     * @param context The application context used to open the database connection.
+     */
     public TaskList(Context context){
         dbHelper = new TasksDatabaseHelper(context);
     }
 
+    /**
+     * Builds a list of headers which already exist in the database.
+     *
+     * @return An ArrayList of the unique header names found in the database.
+     */
     public ArrayList<String> getListDataHeader(){
         ArrayList<String> listDataHeader = new ArrayList<>();  // We use arrayList (instead of List) so we can pass it in an intent
         listDataHeader.addAll(this.getListDataChild().keySet());
         return listDataHeader;
     }
 
+    /**
+     * Builds a HashMap for use with ExpandableListAdapter.
+     *
+     * @return A HashMap mapping headers (strings) to lists of Task objects.
+     */
     public HashMap<String, List<Task>> getListDataChild(){
         HashMap<String, List<Task>> listDataChild = new HashMap<>();
         for(Task currentTask : this.dbHelper.getAllTasks()){
@@ -42,18 +57,20 @@ public class TaskList implements Iterable<Task>{
         return listDataChild;
     }
 
-    public void createNewTask(String header, String taskName){
-        // Adds a new task
+    /**
+     * Creates a new task, and writes it to the database.
+     *
+     * @param header The header under which to file this task.
+     * @param taskName The core text for this task, which should say what needs to be done to complete the task.
+     */
+    private void createNewTask(String header, String taskName){
         Task newTask = new Task(header, taskName);
         this.dbHelper.createTask(newTask);
     }
 
-    public void editTask(int taskId, Task replacementTask){
-        replacementTask.setId(taskId);
-        replacementTask.setChecked(this.dbHelper.getTask(taskId).getChecked());
-        this.dbHelper.updateTask(replacementTask);
-    }
-
+    /**
+     * Removes from the database all tasks which have a checked value of True
+     */
     public void clearCheckedTasks(){
         for(Task task : this.dbHelper.getAllTasks()){
             if(task.getChecked()){
@@ -63,8 +80,6 @@ public class TaskList implements Iterable<Task>{
     }
 
     private void createTestTasks(){
-        // Set up some sample tasks
-
         this.createNewTask("'C' Priority", "write blog post");
         this.createNewTask("'C' Priority", "apply for internships");
         this.createNewTask("'C' Priority", "make video");
@@ -77,12 +92,6 @@ public class TaskList implements Iterable<Task>{
         this.createNewTask("'A' Priority", "write business paper");
         this.createNewTask("'A' Priority", "publish app");
     }
-
-    //public void save(){
-    //    for(Task task : this.dbHelper.getAllTasks()){
-    //        this.dbHelper.updateTask(task);
-    //    }
-    //}
 
     @Override
     public Iterator<Task> iterator() {

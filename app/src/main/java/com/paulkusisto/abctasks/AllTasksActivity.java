@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import java.util.Calendar;
+
 public class AllTasksActivity extends AppCompatActivity {
 
     TaskList taskList = new TaskList(this);
@@ -59,17 +61,35 @@ public class AllTasksActivity extends AppCompatActivity {
             if(requestCode == 2){
                 String headerName = data.getStringExtra("headerName");
                 String taskName = data.getStringExtra("taskName");
+
+                // set up the due date
+                Integer dueDateYear = data.getIntExtra("dueDateYear", 1970);
+                Integer dueDateMonth = data.getIntExtra("dueDateMonth", 1);
+                Integer dueDateDayOfMonth = data.getIntExtra("dueDateDayOfMonth", 1);
+
+                Calendar taskDueDate = Calendar.getInstance();
+                taskDueDate.set(dueDateYear,dueDateMonth,dueDateDayOfMonth);
+
                 int taskId = data.getIntExtra("id", -1);
+
+                // create the new task
+                Task newTask = new Task(headerName, taskName);
+                // set priority and due date
+                // TODO: set priority
+                newTask.setDueDate(taskDueDate);
+
+                // open a database connection
+                TasksDatabaseHelper dbHelper = new TasksDatabaseHelper(getApplicationContext());
 
                 if (taskId == -1) {
                     // This is a new task
-                    taskList.createNewTask(headerName, taskName);
+                    dbHelper.createTask(newTask);
                 }
                 else{
                     // We're editing an existing task
-                    Task replacementTask = new Task(headerName, taskName);
-                    taskList.editTask(taskId, replacementTask);
+                    dbHelper.updateTask(taskId, newTask);
                 }
+
                 rebuildTaskList(taskList);
 
             }

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_create_task" tools:context="com.paulkusisto.abctasks.CreateTask">
+    tools:showIn="@layout/activity_create_task"
+    tools:context="com.paulkusisto.abctasks.CreateTask">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     <TextView android:id="@+id/createTask_HeaderPrompt"
         android:text="@string/create_task_header_prompt"
@@ -34,4 +41,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/createTask_TaskPrompt"/>
-</RelativeLayout>
+    <TextView android:id="@+id/createTask_DueDatePrompt"
+        android:text="@string/create_task_due_date_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/createTask_TaskText"/>
+    <DatePicker android:id="@+id/createTask_DueDatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/createTask_DueDatePrompt"/>
+    </RelativeLayout>
+</ScrollView>
