@@ -108,30 +108,35 @@ public class Task{
         this.dueDate = dueDate;
     }
 
+    // Constant definitions for Intent extra names
+    public static final String HEADER_NAME_INTENT_EXTRA = "passedTaskHeaderName";
+    public static final String TASK_NAME_INTENT_EXTRA = "passedTaskTaskName";
+    public static final String DUE_DATE_INTENT_EXTRA = "passedTaskDueDate";
+    public static final String PRIORITY_INTENT_EXTRA = "passedTaskPriority";
+    public static final String ID_INTENT_EXTRA = "passedTaskId";
+
     public Intent putIntentExtras(Intent intent) {
 
-        //TODO: make these names consts, and prefix a term to keep them separate from other extras
-        intent.putExtra("headerName", this.headerName);
-        intent.putExtra("taskName", this.taskName);
-        intent.putExtra("dueDate", this.dueDate.getTimeInMillis());
-        intent.putExtra("priority", this.priority);
-        intent.putExtra("id", this.id);
+        intent.putExtra(HEADER_NAME_INTENT_EXTRA, this.headerName);
+        intent.putExtra(TASK_NAME_INTENT_EXTRA, this.taskName);
+        intent.putExtra(DUE_DATE_INTENT_EXTRA, this.dueDate.getTimeInMillis());
+        intent.putExtra(PRIORITY_INTENT_EXTRA, this.priority);
+        intent.putExtra(ID_INTENT_EXTRA, this.id);
 
         return intent;
     }
 
     public void setTaskFromIntent(Intent intent) {
 
-        this.setHeaderName(intent.getStringExtra("headerName"));
-        this.setTaskName(intent.getStringExtra("taskName"));
+        this.setHeaderName(intent.getStringExtra(HEADER_NAME_INTENT_EXTRA));
+        this.setTaskName(intent.getStringExtra(TASK_NAME_INTENT_EXTRA));
 
         Calendar dueDate = Calendar.getInstance();
-        dueDate.setTimeInMillis(intent.getLongExtra("dueDate", 0));
+        dueDate.setTimeInMillis(intent.getLongExtra(DUE_DATE_INTENT_EXTRA, 0));
         this.setDueDate(dueDate);
-        //Log.i("TaskCreationInfo", Long.toString(intent.getLongExtra("dueDate", 0)));
 
-        this.setPriority(intent.getStringExtra("priority"));
-        //TODO this.setChecked();
-        this.setId(intent.getIntExtra("id",-1));
+        this.setPriority(intent.getStringExtra(PRIORITY_INTENT_EXTRA));
+        //TODO set checked status, or default to unchecked?
+        this.setId(intent.getIntExtra(ID_INTENT_EXTRA,-1));
     }
 }

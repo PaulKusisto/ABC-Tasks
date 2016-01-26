@@ -64,10 +64,6 @@ public class AllTasksActivity extends AppCompatActivity {
 
                 Task responseTask = new Task("","");
                 responseTask.setTaskFromIntent(data);
-                //TODO: remove these messages
-                Log.i("TaskResponseInfo", Integer.toString(responseTask.getId()));
-                Log.i("TaskResponseInfo", responseTask.getHeaderName());
-                Log.i("TaskResponseInfo", responseTask.getTaskName());
 
                 // open a database connection
                 TasksDatabaseHelper dbHelper = new TasksDatabaseHelper(getApplicationContext());

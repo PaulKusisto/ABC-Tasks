@@ -66,10 +66,11 @@ public class EditTaskActivity extends AppCompatActivity {
 
         // set the other fields to the passed values
         taskText.setText(passedTask.getTaskName());
-        //TODO: default the calendar (for new tasks) to today, not to 1970
+
         taskDueDatePicker.updateDate(passedTask.getDueDate().get(Calendar.YEAR),
                 passedTask.getDueDate().get(Calendar.MONTH),
                 passedTask.getDueDate().get(Calendar.DAY_OF_MONTH));
+
         //TODO: Priority selection must be set
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
