@@ -109,11 +109,11 @@ public class Task{
     }
 
     // Constant definitions for Intent extra names
-    public static final String HEADER_NAME_INTENT_EXTRA = "passedTaskHeaderName";
-    public static final String TASK_NAME_INTENT_EXTRA = "passedTaskTaskName";
-    public static final String DUE_DATE_INTENT_EXTRA = "passedTaskDueDate";
-    public static final String PRIORITY_INTENT_EXTRA = "passedTaskPriority";
-    public static final String ID_INTENT_EXTRA = "passedTaskId";
+    private static final String HEADER_NAME_INTENT_EXTRA = "passedTaskHeaderName";
+    private static final String TASK_NAME_INTENT_EXTRA = "passedTaskTaskName";
+    private static final String DUE_DATE_INTENT_EXTRA = "passedTaskDueDate";
+    private static final String PRIORITY_INTENT_EXTRA = "passedTaskPriority";
+    private static final String ID_INTENT_EXTRA = "passedTaskId";
 
     public Intent putIntentExtras(Intent intent) {
 
@@ -136,7 +136,7 @@ public class Task{
         this.setDueDate(dueDate);
 
         this.setPriority(intent.getStringExtra(PRIORITY_INTENT_EXTRA));
-        //TODO set checked status, or default to unchecked?
+        //TODO set checked status, or default to unchecked?  (currently defaults to unchecked)
         this.setId(intent.getIntExtra(ID_INTENT_EXTRA,-1));
     }
 }
