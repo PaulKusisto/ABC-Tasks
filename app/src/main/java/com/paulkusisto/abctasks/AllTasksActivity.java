@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +31,10 @@ public class AllTasksActivity extends AppCompatActivity {
                 // launch the Create Task activity
                 Intent intent = new Intent(getApplicationContext(), EditTaskActivity.class);
                 intent.putStringArrayListExtra("listDataHeader", taskList.getListDataHeader());
-                intent.putExtra("header","");
-                intent.putExtra("task","");
-                intent.putExtra("id", -1);
+
+                Task emptyTask = new Task("","");
+                emptyTask.putIntentExtras(intent);
+
                 startActivityForResult(intent, 2);
             }
         });
@@ -59,35 +61,24 @@ public class AllTasksActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             if(requestCode == 2){
-                String headerName = data.getStringExtra("headerName");
-                String taskName = data.getStringExtra("taskName");
 
-                // set up the due date
-                Integer dueDateYear = data.getIntExtra("dueDateYear", 1970);
-                Integer dueDateMonth = data.getIntExtra("dueDateMonth", 1);
-                Integer dueDateDayOfMonth = data.getIntExtra("dueDateDayOfMonth", 1);
-
-                Calendar taskDueDate = Calendar.getInstance();
-                taskDueDate.set(dueDateYear,dueDateMonth,dueDateDayOfMonth);
-
-                int taskId = data.getIntExtra("id", -1);
-
-                // create the new task
-                Task newTask = new Task(headerName, taskName);
-                // set priority and due date
-                // TODO: set priority
-                newTask.setDueDate(taskDueDate);
+                Task responseTask = new Task("","");
+                responseTask.setTaskFromIntent(data);
+                //TODO: remove these messages
+                Log.i("TaskResponseInfo", Integer.toString(responseTask.getId()));
+                Log.i("TaskResponseInfo", responseTask.getHeaderName());
+                Log.i("TaskResponseInfo", responseTask.getTaskName());
 
                 // open a database connection
                 TasksDatabaseHelper dbHelper = new TasksDatabaseHelper(getApplicationContext());
 
-                if (taskId == -1) {
-                    // This is a new task
-                    dbHelper.createTask(newTask);
+                if (responseTask.getId() == -1) {
+                    // This task is a new task
+                    dbHelper.createTask(responseTask);
                 }
                 else{
                     // We're editing an existing task
-                    dbHelper.updateTask(taskId, newTask);
+                    dbHelper.updateTask(responseTask.getId(), responseTask);
                 }
 
                 rebuildTaskList(taskList);

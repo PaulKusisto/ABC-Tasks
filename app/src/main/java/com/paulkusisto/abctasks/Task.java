@@ -1,6 +1,8 @@
 package com.paulkusisto.abctasks;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -28,25 +30,32 @@ public class Task{
      * @param taskName The name of this task - this String is the core of the task from the user's perspective.
      */
     public Task(String headerName, String taskName) {
-        this.headerName = headerName;
-        this.taskName = taskName;
-        this.checked = false;
+        this.setHeaderName(headerName);
+        this.setTaskName(taskName);
+
+        this.setChecked(false);
+
+        // By default, set id to be -1, to differentiate new tasks from tasks which exist in the database
+        this.setId(-1);
 
         // By default, set the priority to the empty string
         this.setPriority("");
 
-        // By default, set the due date to the Unix Epoch
-        Calendar epoch = Calendar.getInstance();
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        epoch.setTimeZone(utc);
-        epoch.set(Calendar.YEAR, 1970);
-        epoch.set(Calendar.MONTH, Calendar.JANUARY);
-        epoch.set(Calendar.DATE, 1);
-        epoch.set(Calendar.HOUR_OF_DAY, 0);
-        epoch.set(Calendar.MINUTE, 0);
-        epoch.set(Calendar.SECOND, 0);
-        epoch.set(Calendar.MILLISECOND, 0);
-        this.setDueDate(epoch);
+        //// By default, set the due date to the Unix Epoch
+        //Calendar epoch = Calendar.getInstance();
+        //TimeZone utc = TimeZone.getTimeZone("UTC");
+        //epoch.setTimeZone(utc);
+        //epoch.set(Calendar.YEAR, 1970);
+        //epoch.set(Calendar.MONTH, Calendar.JANUARY);
+        //epoch.set(Calendar.DATE, 1);
+        //epoch.set(Calendar.HOUR_OF_DAY, 0);
+        //epoch.set(Calendar.MINUTE, 0);
+        //epoch.set(Calendar.SECOND, 0);
+        //epoch.set(Calendar.MILLISECOND, 0);
+
+        // By default, set the due date to today
+        Calendar cal = Calendar.getInstance();
+        this.setDueDate(cal);
     }
 
     public String getTaskName(){
@@ -73,6 +82,14 @@ public class Task{
         return id;
     }
 
+    private void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    private void setHeaderName(String headerName) {
+        this.headerName = headerName;
+    }
+
     public void setId(int id){
         this.id = id;
     }
@@ -89,5 +106,32 @@ public class Task{
 
     public void setDueDate(Calendar dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Intent putIntentExtras(Intent intent) {
+
+        //TODO: make these names consts, and prefix a term to keep them separate from other extras
+        intent.putExtra("headerName", this.headerName);
+        intent.putExtra("taskName", this.taskName);
+        intent.putExtra("dueDate", this.dueDate.getTimeInMillis());
+        intent.putExtra("priority", this.priority);
+        intent.putExtra("id", this.id);
+
+        return intent;
+    }
+
+    public void setTaskFromIntent(Intent intent) {
+
+        this.setHeaderName(intent.getStringExtra("headerName"));
+        this.setTaskName(intent.getStringExtra("taskName"));
+
+        Calendar dueDate = Calendar.getInstance();
+        dueDate.setTimeInMillis(intent.getLongExtra("dueDate", 0));
+        this.setDueDate(dueDate);
+        //Log.i("TaskCreationInfo", Long.toString(intent.getLongExtra("dueDate", 0)));
+
+        this.setPriority(intent.getStringExtra("priority"));
+        //TODO this.setChecked();
+        this.setId(intent.getIntExtra("id",-1));
     }
 }

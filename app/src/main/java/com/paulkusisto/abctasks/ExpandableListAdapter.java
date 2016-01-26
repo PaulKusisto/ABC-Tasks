@@ -98,13 +98,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: specific method to build an intent from a task - this passing structure breaks due dates
+
                 Intent intent = new Intent(_context, EditTaskActivity.class);
+
+                childTask.putIntentExtras(intent);
+
                 intent.putStringArrayListExtra("listDataHeader", (ArrayList<String>) _listDataHeader);
-                intent.putExtra("header", childTask.getHeaderName());
-                intent.putExtra("task",childTask.getTaskName());
-                intent.putExtra("id",childTask.getId());
-                // TODO: add additional intents for due date, priority, etc.
+
                 ((Activity) _context).startActivityForResult(intent, 2);
             }
         });

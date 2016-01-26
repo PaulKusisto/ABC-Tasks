@@ -15,11 +15,10 @@ import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class EditTaskActivity extends AppCompatActivity {
-
-    int taskId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,10 @@ public class EditTaskActivity extends AppCompatActivity {
 
         Intent sender = getIntent();
         ArrayList<String> listDataHeader = sender.getStringArrayListExtra("listDataHeader");
-        taskId = sender.getIntExtra("id",-1);
+
+        // create the passed task
+        final Task passedTask = new Task("","");
+        passedTask.setTaskFromIntent(sender);
 
         // get all of the elements we'll be using
         final EditText taskHeaderText = (EditText) findViewById(R.id.createTask_HeaderText);
@@ -43,6 +45,9 @@ public class EditTaskActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, listDataHeader);
         taskHeaderSpinner.setAdapter(adapter);
+
+        taskHeaderSpinner.setSelection(listDataHeader.indexOf(passedTask.getHeaderName()));
+
         taskHeaderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -58,6 +63,14 @@ public class EditTaskActivity extends AppCompatActivity {
                 taskHeaderText.setVisibility(View.VISIBLE);
             }
         });
+
+        // set the other fields to the passed values
+        taskText.setText(passedTask.getTaskName());
+        //TODO: default the calendar (for new tasks) to today, not to 1970
+        taskDueDatePicker.updateDate(passedTask.getDueDate().get(Calendar.YEAR),
+                passedTask.getDueDate().get(Calendar.MONTH),
+                passedTask.getDueDate().get(Calendar.DAY_OF_MONTH));
+        //TODO: Priority selection must be set
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -76,30 +89,29 @@ public class EditTaskActivity extends AppCompatActivity {
                 // get the task name
                 String taskName = taskText.getText().toString();
 
+                // create the new task
+                Task taskToPass = new Task(headerName,taskName);
+                taskToPass.setId(passedTask.getId());  // we already know the ID
+
                 // get the task priority
                 // TODO
-                String taskPriority = getResources().getString(R.string.priority_low);  // Default to low priority
+                taskToPass.setPriority(getResources().getString(R.string.priority_low));  // Default to low priority
 
                 // get the calendar info for due date
-                Integer dueDateYear = taskDueDatePicker.getYear();
-                Integer dueDateMonth = taskDueDatePicker.getMonth();
-                Integer dueDateDayOfMonth = taskDueDatePicker.getDayOfMonth();
+                Calendar dueDate = Calendar.getInstance();
+                dueDate.set(Calendar.YEAR,taskDueDatePicker.getYear());
+                dueDate.set(Calendar.MONTH,taskDueDatePicker.getMonth());
+                dueDate.set(Calendar.DAY_OF_MONTH,taskDueDatePicker.getDayOfMonth());
+                taskToPass.setDueDate(dueDate);
+                //TODO: time zone stuff?
 
                 Intent intent = new Intent();
-                intent.putExtra("headerName", headerName);
-                intent.putExtra("taskName", taskName);
-                intent.putExtra("dueDateYear", dueDateYear);
-                intent.putExtra("dueDateMonth", dueDateMonth);
-                intent.putExtra("dueDateDayOfMonth", dueDateDayOfMonth);
-                intent.putExtra("taskPriority", taskPriority);
-                intent.putExtra("id", taskId);
+                taskToPass.putIntentExtras(intent);
+//
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
-
-        taskHeaderSpinner.setSelection(listDataHeader.indexOf(sender.getStringExtra("header")));
-        taskText.setText(sender.getStringExtra("task"));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
